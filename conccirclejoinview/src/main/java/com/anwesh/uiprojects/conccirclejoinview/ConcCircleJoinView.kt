@@ -22,7 +22,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#1565C0")
 val backColor : Int = Color.parseColor("#BDBDBD")
-val rUpFactor : Float = 0.1f
+val rUpFactor : Float = 0.3f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
@@ -63,6 +63,7 @@ fun Canvas.drawCCJNode(i : Int, scale : Float, paint : Paint) {
             drawLine(r, 0f, r - rUpFactor * r * scj11, 0f, paint)
             drawArc(RectF(-newR, -newR, newR, newR), 0f, 360f * scj12, false, paint)
             restore()
+            r *= (1 - rUpFactor)
         }
     })
 

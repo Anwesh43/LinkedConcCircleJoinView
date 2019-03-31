@@ -55,8 +55,8 @@ fun Canvas.drawCCJNode(i : Int, scale : Float, paint : Paint) {
         for (j in 0..(circles - 1)) {
             val scj1 : Float = sc1.divideScale(j, circles)
             val scj2 : Float = sc2.divideScale(j, circles)
-            val scj11 : Float = scj1.divideScale(0, 2)
-            val scj12 : Float = scj1.divideScale(1, 2)
+            val scj11 : Float = scj1.divideScale(0, parts)
+            val scj12 : Float = scj1.divideScale(1, parts)
             val newR : Float = r * (1 - rUpFactor)
             save()
             rotate(90f * scj2)
@@ -83,5 +83,25 @@ class ConcCircleJoinView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            scale += scale.updateValue(dir, circles * parts, circles)
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }

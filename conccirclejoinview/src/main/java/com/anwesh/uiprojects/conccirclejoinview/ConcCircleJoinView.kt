@@ -200,4 +200,26 @@ class ConcCircleJoinView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : ConcCircleJoinView) {
+
+        private val animator : Animator = Animator(view)
+        private val ccj : ConcCircleJoin = ConcCircleJoin(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            ccj.draw(canvas, paint)
+            animator.animate {
+                ccj.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            ccj.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
